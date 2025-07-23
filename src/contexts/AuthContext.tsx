@@ -1,16 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-
-interface User {
-  email: string;
-  name: string;
-  isVerified: boolean;
-}
+import { User, Session } from '@supabase/supabase-js';
+import { supabase } from '@/integrations/supabase/client';
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string, name: string) => Promise<boolean>;
-  logout: () => void;
-  verifyEmail: (code: string) => boolean;
+  session: Session | null;
+  signUp: (email: string, password: string) => Promise<{ error?: string }>;
+  signIn: (email: string, password: string) => Promise<{ error?: string }>;
+  logout: () => Promise<void>;
   isLoading: boolean;
 }
 
@@ -26,56 +23,70 @@ export const useAuth = () => {
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [verificationCode] = useState('1234'); // Mock verification code
 
   useEffect(() => {
-    // Check if user is already logged in
-    const savedUser = localStorage.getItem('studyBuddyUser');
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-    setIsLoading(false);
+    // Set up auth state listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setSession(session);
+        setUser(session?.user ?? null);
+        setIsLoading(false);
+      }
+    );
+
+    // Check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      setIsLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  const login = async (email: string, password: string, name: string): Promise<boolean> => {
-    setIsLoading(true);
+  const signUp = async (email: string, password: string) => {
+    const redirectUrl = `${window.location.origin}/`;
     
-    // Mock login - in real app, this would call an API
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    const newUser: User = {
+    const { error } = await supabase.auth.signUp({
       email,
-      name,
-      isVerified: false
-    };
+      password,
+      options: {
+        emailRedirectTo: redirectUrl
+      }
+    });
     
-    setUser(newUser);
-    localStorage.setItem('studyBuddyUser', JSON.stringify(newUser));
-    setIsLoading(false);
-    return true;
-  };
-
-  const verifyEmail = (code: string): boolean => {
-    if (code === verificationCode && user) {
-      const verifiedUser = { ...user, isVerified: true };
-      setUser(verifiedUser);
-      localStorage.setItem('studyBuddyUser', JSON.stringify(verifiedUser));
-      return true;
+    if (error) {
+      return { error: error.message };
     }
-    return false;
+    
+    return {};
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('studyBuddyUser');
+  const signIn = async (email: string, password: string) => {
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+    
+    if (error) {
+      return { error: error.message };
+    }
+    
+    return {};
+  };
+
+  const logout = async () => {
+    await supabase.auth.signOut();
   };
 
   const value = {
     user,
-    login,
+    session,
+    signUp,
+    signIn,
     logout,
-    verifyEmail,
     isLoading
   };
 

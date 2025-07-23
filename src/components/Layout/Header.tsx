@@ -47,7 +47,7 @@ export const Header: React.FC<HeaderProps> = ({ onContactClick }) => {
         
         {user && (
           <div className="text-center text-white/90">
-            <p className="text-lg">Welcome back, <span className="font-semibold">{user.name}</span>!</p>
+            <p className="text-lg">Welcome back, <span className="font-semibold">{user.email}</span>!</p>
           </div>
         )}
       </div>

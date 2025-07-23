@@ -14,15 +14,14 @@ interface LoginFormProps {
 export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
   const [isLogin, setIsLogin] = useState(true);
-  const { login, isLoading } = useAuth();
+  const { signUp, signIn, isLoading } = useAuth();
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!email || !password || (!isLogin && !name)) {
+    if (!email || !password) {
       toast({
         title: "Error",
         description: "Please fill in all required fields",
@@ -32,18 +31,37 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
     }
 
     try {
-      const success = await login(email, password, name || email.split('@')[0]);
-      if (success) {
+      let result;
+      if (isLogin) {
+        result = await signIn(email, password);
+      } else {
+        result = await signUp(email, password);
+      }
+      
+      if (result.error) {
         toast({
-          title: "Login Successful!",
-          description: "Please check your email for verification code",
+          title: isLogin ? "Login Failed" : "Sign Up Failed",
+          description: result.error,
+          variant: "destructive"
         });
-        onSuccess();
+      } else {
+        if (isLogin) {
+          toast({
+            title: "Login Successful!",
+            description: "Welcome back!",
+          });
+          onSuccess();
+        } else {
+          toast({
+            title: "Sign Up Successful!",
+            description: "Please check your email for verification link",
+          });
+        }
       }
     } catch (error) {
       toast({
-        title: "Login Failed",
-        description: "Please check your credentials and try again",
+        title: "Error",
+        description: "Something went wrong. Please try again.",
         variant: "destructive"
       });
     }
@@ -69,19 +87,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            {!isLogin && (
-              <div className="space-y-2">
-                <Label htmlFor="name">Full Name</Label>
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="Enter your full name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required={!isLogin}
-                />
-              </div>
-            )}
             
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
