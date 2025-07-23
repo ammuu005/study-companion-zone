@@ -61,7 +61,48 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Study Buddy Educational Department Colors
+				cse: {
+					primary: 'hsl(var(--cse-primary))',
+					secondary: 'hsl(var(--cse-secondary))'
+				},
+				ece: {
+					primary: 'hsl(var(--ece-primary))',
+					secondary: 'hsl(var(--ece-secondary))'
+				},
+				eee: {
+					primary: 'hsl(var(--eee-primary))',
+					secondary: 'hsl(var(--eee-secondary))'
+				},
+				civil: {
+					primary: 'hsl(var(--civil-primary))',
+					secondary: 'hsl(var(--civil-secondary))'
+				},
+				mech: {
+					primary: 'hsl(var(--mech-primary))',
+					secondary: 'hsl(var(--mech-secondary))'
+				},
+				it: {
+					primary: 'hsl(var(--it-primary))',
+					secondary: 'hsl(var(--it-secondary))'
+				},
+				ce: {
+					primary: 'hsl(var(--ce-primary))',
+					secondary: 'hsl(var(--ce-secondary))'
 				}
+			},
+			backgroundImage: {
+				'gradient-primary': 'var(--gradient-primary)',
+				'gradient-hero': 'var(--gradient-hero)',
+				'gradient-auth': 'var(--gradient-auth)'
+			},
+			boxShadow: {
+				'elegant': 'var(--shadow-elegant)',
+				'glow': 'var(--shadow-glow)'
+			},
+			transitionTimingFunction: {
+				'smooth': 'var(--transition-smooth)'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
