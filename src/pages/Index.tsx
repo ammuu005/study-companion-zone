@@ -19,6 +19,11 @@ const Index = () => {
     );
   }
 
+  // Add error boundary for debugging
+  if (!user && !isLoading) {
+    console.log('No user found, showing login form');
+  }
+
   // If no user, show login form
   if (!user) {
     return <LoginForm onSuccess={() => setShowVerification(true)} />;

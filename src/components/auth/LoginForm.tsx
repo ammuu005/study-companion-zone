@@ -21,6 +21,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    console.log('Form submitted with:', { email, isLogin });
+    
     if (!email || !password) {
       toast({
         title: "Error",
@@ -33,10 +35,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
     try {
       let result;
       if (isLogin) {
+        console.log('Attempting sign in...');
         result = await signIn(email, password);
       } else {
+        console.log('Attempting sign up...');
         result = await signUp(email, password);
       }
+      
+      console.log('Auth result:', result);
       
       if (result.error) {
         toast({
@@ -59,6 +65,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
         }
       }
     } catch (error) {
+      console.error('Auth error:', error);
       toast({
         title: "Error",
         description: "Something went wrong. Please try again.",

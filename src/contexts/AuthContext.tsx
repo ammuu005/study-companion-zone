@@ -47,10 +47,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const signUp = async (email: string, password: string) => {
-    // Use the correct development port
-    const redirectUrl = window.location.hostname === 'localhost' 
-      ? 'http://localhost:8080/'
-      : `${window.location.origin}/`;
+    // Use the correct redirect URL for both development and production
+    const redirectUrl = window.location.origin + '/';
     
     const { error } = await supabase.auth.signUp({
       email,
