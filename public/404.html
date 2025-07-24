@@ -4,32 +4,10 @@
     <meta charset="utf-8">
     <title>Study Buddy</title>
     <script type="text/javascript">
-      // Single Page Apps for GitHub Pages
-      var pathSegments = location.pathname.split('/').filter(function(segment) {
-        return segment.length > 0;
-      });
-      
-      if (pathSegments.length > 0) {
-        var repoName = pathSegments[0];
-        var redirect = '/' + repoName + '/';
-        
-        if (location.search) {
-          var query = location.search.slice(1);
-          redirect += '?' + query.split('&').map(function(param) {
-            return param.replace(/~and~/g, '&');
-          }).join('&');
-        }
-        
-        if (location.hash) {
-          redirect += location.hash;
-        }
-        
-        window.history.replaceState(null, null, redirect);
-        location.replace(redirect);
-      }
+      // Redirect all routes to index.html for SPA routing
+      window.location.replace('/');
     </script>
   </head>
   <body>
-  </body>
   </body>
 </html>

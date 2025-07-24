@@ -5,10 +5,8 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  // For GitHub Pages, the base should be the repository name
-  // Get from GITHUB_REPOSITORY env var or default to current directory name
-  const repoName = process.env.GITHUB_REPOSITORY?.split('/')[1] || path.basename(process.cwd());
-  const base = mode === 'production' ? `/${repoName}/` : '/';
+  // For Netlify deployment, use root path
+  const base = '/';
   
   return {
   base,
