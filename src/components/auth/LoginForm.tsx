@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { OTPVerification } from './OTPVerification';
 import studyBuddyLogo from '@/assets/study-buddy-logo.jpg';
 
 interface LoginFormProps {
@@ -15,6 +16,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLogin, setIsLogin] = useState(true);
+  const [showOTPVerification, setShowOTPVerification] = useState(false);
+  const [signupEmail, setSignupEmail] = useState('');
   const { signUp, signIn, isLoading } = useAuth();
   const { toast } = useToast();
 
@@ -58,9 +61,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
           });
           onSuccess();
         } else {
+          setSignupEmail(email);
+          setShowOTPVerification(true);
           toast({
-            title: "Sign Up Successful!",
-            description: "Please check your email for verification link",
+            title: "Verification Code Sent!",
+            description: "Please check your email for the 6-digit verification code",
           });
         }
       }
@@ -73,6 +78,16 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
       });
     }
   };
+
+  if (showOTPVerification) {
+    return (
+      <OTPVerification
+        email={signupEmail}
+        onBack={() => setShowOTPVerification(false)}
+        onSuccess={onSuccess}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-auth p-4">

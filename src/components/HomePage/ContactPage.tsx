@@ -130,10 +130,10 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onBack }) => {
               <p className="text-muted-foreground">
                 Or email us directly at:{" "}
                 <a 
-                  href="mailto:studybuddy05@gmail.com" 
+                  href="mailto:studybuddy.studybuddy05@gmail.com" 
                   className="text-primary hover:underline font-medium"
                 >
-                  studybuddy05@gmail.com
+                  studybuddy.studybuddy05@gmail.com
                 </a>
               </p>
             </div>
