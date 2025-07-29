@@ -7,8 +7,6 @@ interface AuthContextType {
   session: Session | null;
   signUp: (email: string, password: string) => Promise<{ error?: string }>;
   signIn: (email: string, password: string) => Promise<{ error?: string }>;
-  verifyOTP: (email: string, token: string) => Promise<{ error?: string }>;
-  resendOTP: (email: string) => Promise<{ error?: string }>;
   logout: () => Promise<void>;
   isLoading: boolean;
 }
@@ -53,7 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       email,
       password,
       options: {
-        emailRedirectTo: undefined, // Disable email redirect since we're using OTP
+        emailRedirectTo: `${window.location.origin}/`
       }
     });
     
@@ -64,35 +62,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return {};
   };
 
-  const verifyOTP = async (email: string, token: string) => {
-    const { error } = await supabase.auth.verifyOtp({
-      email,
-      token,
-      type: 'signup'
-    });
-    
-    if (error) {
-      return { error: error.message };
-    }
-    
-    return {};
-  };
-
-  const resendOTP = async (email: string) => {
-    const { error } = await supabase.auth.resend({
-      type: 'signup',
-      email,
-      options: {
-        emailRedirectTo: undefined
-      }
-    });
-    
-    if (error) {
-      return { error: error.message };
-    }
-    
-    return {};
-  };
 
 
   const signIn = async (email: string, password: string) => {
@@ -117,8 +86,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     session,
     signUp,
     signIn,
-    verifyOTP,
-    resendOTP,
     logout,
     isLoading
   };
