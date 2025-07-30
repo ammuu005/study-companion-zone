@@ -29,17 +29,6 @@ const Index = () => {
     return <LoginForm onSuccess={() => setShowVerification(true)} />;
   }
 
-  // If user exists but email not confirmed, show verification message
-  if (user && !user.email_confirmed_at) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-auth p-4">
-        <div className="text-center text-white">
-          <h2 className="text-2xl mb-4">Please verify your email</h2>
-          <p>Check your email and click the verification link to continue.</p>
-        </div>
-      </div>
-    );
-  }
 
   // User is logged in and verified, show main app
   return <HomePage />;

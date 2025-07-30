@@ -61,8 +61,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
         } else {
           toast({
             title: "Sign Up Successful!",
-            description: "Please check your email and click the verification link to activate your account",
+            description: "You can now sign in with your credentials",
           });
+          setIsLogin(true); // Switch to login mode after successful signup
         }
       }
     } catch (error) {
